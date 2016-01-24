@@ -2,7 +2,7 @@
 Custom implementation of Android's CountDownTimer 
 
 ## Differences over the original implementation
-* New empty constructor and start(long millisInFuture, long countDownInterval) method to change the interval CountDown and the time until the countdown is done. 
+* New empty constructor and `start(long millisInFuture, long countDownInterval)` method to change the `onTick(long millisUntilFinished)` interval and the time until the countdown is done. 
 * Static handler class to prevent memory leaks. 
 
 More information about handler's memory leaks can be found in:
