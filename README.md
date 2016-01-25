@@ -23,7 +23,7 @@ When I rotate the device, MainActivity is destroyed and another instance is crea
 
 If I force the GC process, in theory the previous referenced instances of the CountDownTimer should be destroyed (nobody references this instances).
 
-In the original implementation, this does not work this way, because the handler have a reference of the outer class. This causes a memory leak.
+In the original implementation, this does not work this way, because the handler have a reference of the outer class. This causes a memory leak (it lasts until the countdown ends).
 
 With the fixed implementation (static handler class), although if I destroy and recreate many times MainActivity, when I force the GC, unreferenced instances will be destroyed.
 
