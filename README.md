@@ -16,3 +16,14 @@ Also you can cherry-pick my commit (https://github.com/pbr1111/platform_framewor
 - Video of the original implementation: https://youtu.be/xueSSv8JaOY
 - Video with the fixed version: https://youtu.be/DDMrR61CQLg
 
+
+In the first video, it can be see the original implementation of the class CountDownTimer.java, using a anonymous handler class. 
+
+When I rotate the device, MainActivity is destroyed and another instance is created. MainActivity.onCreate(Bundle) is called every time, creating another instance of the CountDownTimer class and it assigns this instance in the variable countDownTimer.
+
+If I force the GC process, in theory the previous referenced instances of the CountDownTimer should be destroyed (nobody references this instances).
+
+In the original implementation, this does not work this way, because the handler have a reference of the outer class. This causes a memory leak.
+
+With the fixed implementation (static handler class), although if I destroy and recreate many times MainActivity, when I force the GC, unreferenced instances will be destroyed.
+
