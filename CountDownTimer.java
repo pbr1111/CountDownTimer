@@ -140,35 +140,37 @@ public abstract class CountDownTimer {
         private final WeakReference<CountDownTimer> countDownTimerWeakReference;
 
         /**
-         * Constructor.
-         * @param countDownInstance
+         * Handler constructor.
+         * @param countDownTimeInstance
          */
-        public CountDownTimerHandler(CountDownTimer countDownInstance) {
-            countDownTimerWeakReference = new WeakReference<CountDownTimer>(countDownInstance);
+        public CountDownTimerHandler(CountDownTimer countDownTimeInstance) {
+            countDownTimerWeakReference = new WeakReference<CountDownTimer>(countDownTimeInstance);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            synchronized (countDownTimerWeakReference.get()) {
-                CountDownTimer countDownTimer = countDownTimerWeakReference.get();
-                if (countDownTimer.mCancelled) {
-                    return;
-                }
-                final long millisLeft = countDownTimer.mStopTimeInFuture - SystemClock.elapsedRealtime();
-                if (millisLeft <= 0) {
-                    countDownTimer.onFinish();
-                } else if (millisLeft < countDownTimerWeakReference.get().mCountdownInterval) {
-                    // no tick, just delay until done
-                    sendMessageDelayed(obtainMessage(MSG), millisLeft);
-                } else {
-                    long lastTickStart = SystemClock.elapsedRealtime();
-                    countDownTimer.onTick(millisLeft);
-                    // take into account user's onTick taking time to execute
-                    long delay = lastTickStart + countDownTimer.mCountdownInterval - SystemClock.elapsedRealtime();
-                    // special case: user's onTick took more than interval to
-                    // complete, skip to next interval
-                    while (delay < 0) delay += countDownTimer.mCountdownInterval;
-                    sendMessageDelayed(obtainMessage(MSG), delay);
+            CountDownTimer countDownTimer = countDownTimerWeakReference.get();
+            if(countDownTimer instanceof CountDownTimer) {
+                synchronized (countDownTimer) {
+                    if (countDownTimer.mCancelled) {
+                        return;
+                    }
+                    final long millisLeft = countDownTimer.mStopTimeInFuture - SystemClock.elapsedRealtime();
+                    if (millisLeft <= 0) {
+                        countDownTimer.onFinish();
+                    } else if (millisLeft < countDownTimer.mCountdownInterval) {
+                        // no tick, just delay until done
+                        sendMessageDelayed(obtainMessage(MSG), millisLeft);
+                    } else {
+                        long lastTickStart = SystemClock.elapsedRealtime();
+                        countDownTimer.onTick(millisLeft);
+                        // take into account user's onTick taking time to execute
+                        long delay = lastTickStart + countDownTimer.mCountdownInterval - SystemClock.elapsedRealtime();
+                        // special case: user's onTick took more than interval to
+                        // complete, skip to next interval
+                        while (delay < 0) delay += countDownTimer.mCountdownInterval;
+                        sendMessageDelayed(obtainMessage(MSG), delay);
+                    }
                 }
             }
         }
