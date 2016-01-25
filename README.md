@@ -11,7 +11,7 @@ More information about handler's memory leaks can be found in:
 
 
 ## Android 
-Also you can cherry-pick my commit (https://github.com/pbr1111/platform_frameworks_base/commit/4e093d4c450ecdcc1e8830a104379c80d2ea1df6), fixing the memory leak in the android/frameworks_base project. This commit it's based on the original implementation and does not include the new contructor and start method. 
+Also you can cherry-pick my commit (https://github.com/pbr1111/platform_frameworks_base/commit/4e093d4c450ecdcc1e8830a104379c80d2ea1df6), fixing the memory leak in the android/platform/frameworks/base project. This commit it's based on the original implementation and does not include the new contructor and start method. 
 
 Video of the original implementation: https://youtu.be/xueSSv8JaOY
 Video with the fixed version: https://youtu.be/DDMrR61CQLg
